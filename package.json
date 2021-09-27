@@ -1,0 +1,31 @@
+{
+  "name": "domain-finder",
+  "version": "0.0.1",
+  "description": "find list of valid domains",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohammadyaser/domian-finder.git"
+  },
+  "keywords": [
+    "domain"
+  ],
+  "author": "Yaser",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mohammadyaser/domian-finder/issues"
+  },
+  "homepage": "https://github.com/mohammadyaser/domian-finder#readme",
+  "dependencies": {
+    "async": "^3.2.1",
+    "axios": "^0.21.4",
+    "console-table-printer": "^2.10.0",
+    "form-data": "^4.0.0",
+    "q": "^1.5.1",
+    "qs": "^6.10.1",
+    "table": "^6.7.1"
+  }
+}
