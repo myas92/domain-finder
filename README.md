@@ -29,7 +29,7 @@ Available domains:
 ╔═══════════════╤═════════════════╤═════════════════╤═══════════════╤════════════════╤═════════════════╤═════════════════╗
 ║ apple.com │ appledesai.com │ applehashem.com │ applesaid.net │ applemalik.net │ appleabbas.net │ appledesai.net ║
 ╚═══════════════╧═════════════════╧═════════════════╧═══════════════╧════════════════╧═════════════════╧═════════════════╝
-Unvailable domains:
+Unavailable domains:
 ╔═══════════╤═══════════╗
 ║ apple.com │ apple.net ║
 ╚═══════════╧═══════════╝

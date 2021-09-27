@@ -1,6 +1,6 @@
 {
   "name": "domain-finder",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "find list of valid domains",
   "main": "index.js",
   "scripts": {
