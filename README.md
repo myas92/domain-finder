@@ -66,3 +66,52 @@ domainFinder({
     postfix:"coin"
 })
 ```
+## Fourth Example ##
+If you want to find domains for a word with lower than 4 length, you should set `prefix` or `postfix`,
+There are diffrenete status for prefix and post fix
+
+`statusPrefix=0` that means if you set the `prefix` is ignored.
+`statusPrefix=1` that means if just check domain for words with prefix.
+`statusPrefix=2` that means if just check domain for words with prefix and none prefix.
+
+`statusPostfix` is like the `statusPostfix`
+
+
+If you don't set status for `statusPostfix` or `statusPostfix` default value is 5 that means check all conditions
+
+
+```
+statusPrefix=0, ["a","b"] => ["a", "b"]
+statusPrefix=1, ["a","b"] => ["ia", "ib"]
+statusPrefix=2, ["a","b"] => ["a", "b"] and ["ia", "ib"] 
+
+statusPrefix=2, ["app"] => ["app", "apa"] => ["app", "apa"] 
+statusPrefix=3, ["app"] => ["app", "apa"] => ["iapp", "iapa"] 
+statusPrefix=4, ["app"] => ["app", "apa"] => ["app", "apa"] and ["iapp", "iapa"] 
+-----------------------------------------------------------------------------------------
+statusPostfix=0, ["a","b"] => ["a", "b"]
+statusPostfix=1, ["a","b"] => ["ai", "bi"]
+statusPostfix=2, ["a","b"] => ["a", "b"] and ["ai", "bi"] 
+
+statusPostfix=2, ["app"] => ["app", "apa"] => ["app", "apa"] 
+statusPostfix=3, ["app"] => ["app", "apa"] => ["appi", "apai"] 
+statusPostfix=4, ["app"] => ["app", "apa"] => ["app", "apa"] and ["appi", "apai"];
+-----------------------------------------------------------------------------------------
+
+ (prefix=i && statusPrefix=5) &&(postfix= x && statusPostfix=5), 
+["app"] => ["app", "apa"] => ["app", "apa"] and ["appx", "apax"]; and ["iapp","iapa"] and ["iappx", "iapax"]
+```
+
+
+```
+const domainFinder = require('domain-finder');
+
+domainFinder({
+    domainNames:["apple"],
+    tlds: ["com","net"],
+    prefix:"i",
+    postfix:"coin"
+    statusPrefix: 5,
+    statusPostfix: 5
+})
+```

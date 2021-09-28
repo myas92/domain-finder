@@ -11,14 +11,14 @@ class BusinessLogic {
         this.finderWords = new FinderWords();
     }
     async process({ domainNames, tlds, consoleLog, prefix, postfix, statusPrefix, statusPostfix }) {
-        let domains;
+        let initDomains;
         if (domainNames.length == 1)
-            domains = await this.finderWords.find(domainNames[0])
+            initDomains = await this.finderWords.find(domainNames[0])
         else {
-            domains = domainNames
+            initDomains = domainNames
         }
-        let parsedDomain = this.setPostfixPrefixDomain({ domains, prefix, postfix, statusPrefix, statusPostfix })
-        let urls = await this.getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix })
+        let parsedDomain = this.setPostfixPrefixDomain({ domains: initDomains, prefix, postfix, statusPrefix, statusPostfix })
+        let urls = await this.getUrlsFromGoogle({ domains: parsedDomain, prefix, postfix, statusPrefix, statusPostfix })
         let allParsedUrls = this.saveUrls(urls, tlds, consoleLog)
         return allParsedUrls
     }
@@ -33,7 +33,6 @@ class BusinessLogic {
 
             })
         }
-
         if (prefix) {
             if (statusPrefix == 0) {
                 domains.forEach(item => {
@@ -74,20 +73,15 @@ class BusinessLogic {
                 })
             }
         }
-
-
         let uniqeDomain = [...new Set(result)]
-        console.log(uniqeDomain);
-        console.log(result);
+
+        return uniqeDomain
     }
     async getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix }) {
         let defer = q.defer()
         let googleUrls = []
         async.eachOfSeries(domains, async (domain, index) => {
             try {
-                if (domain.length < 4 && (prefix || postfix))
-                    domain = `${prefix}${domain}${postfix}`.toLowerCase()
-
                 console.log(`${index + 1}:${domain.toLowerCase()}`);
                 const { error, result } = await GoogleWeb.run(domain);
                 if (error) {
@@ -97,8 +91,6 @@ class BusinessLogic {
                     let obj = { domainName: domain, urls: result }
                     googleUrls.push(obj)
                 }
-
-
             } catch (error) {
                 console.log(error.message)
             }
