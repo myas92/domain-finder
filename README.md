@@ -1,5 +1,6 @@
 # domian-finder
 
+[domain-finder](https://github.com/mohammadyaser/domian-finder) is used to find, scan and collect available and unavailable domains;
 
 If you spend more time for choosing the domain name, with this module you can quickly find a suitable name for own
 
@@ -7,9 +8,8 @@ If you spend more time for choosing the domain name, with this module you can qu
 
 #### NOTE: domain name should be a word whitout numbers
 
-```
+```javascript
 const domainFinder = require('domain-finder');
-
 
 domainFinder({
     domainNames:["hello"],
@@ -44,7 +44,7 @@ Unavailable domains:
 
 if you want for check the domains of a series of specefic words, just try like this
 
-```
+```javascript
 const domainFinder = require('domain-finder');
 
 domainFinder({
@@ -56,7 +56,7 @@ domainFinder({
 ## Third Example ##
 If you want to find domains for a word with lower than 4 length, you should set `prefix` or `postfix`
 
-```
+```javascript
 const domainFinder = require('domain-finder');
 
 domainFinder({
@@ -103,7 +103,7 @@ statusPostfix=4, ["app"] => ["app", "apa"] => ["app", "apa"] and ["appi", "apai"
 ```
 
 
-```
+```javascript
 const domainFinder = require('domain-finder');
 
 domainFinder({
@@ -115,3 +115,26 @@ domainFinder({
     statusPostfix: 5
 })
 ```
+
+## Fifth Example ##
+
+If you want to show the avialable and unavailable domains log into terminal use `consoleLog`
+
+Default value for `consoleLog` is `false`
+```javascript
+const domainFinder = require('domain-finder');
+
+domainFinder({
+    domainNames:["hello","baby"],
+    tlds: ["com","net","org"],
+    consoleLog: true
+})
+```
+
+result: 
+
+![alt text](https://github.com/mohammadyaser/domain-finder/blob/master/result.png?raw=true)
+
+
+
+

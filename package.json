@@ -1,7 +1,7 @@
 {
   "name": "domain-finder",
   "version": "0.0.5",
-  "description": "Find list of valid domains based in a key word",
+  "description": "Find list of valid domains based on a key word",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
