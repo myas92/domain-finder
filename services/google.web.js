@@ -34,6 +34,9 @@ class GoogleWeb {
            
             return { error: null, result: doamins }
         } catch (error) {
+            if(error.message == "Request failed with status code 403"){
+                console.log("Maybe your are from Iran, Cuba, Sudan, Syria, and North Korea, Please use a VPN or Proxy")
+            }
             return { error: error.message, result: null }
         }
 
