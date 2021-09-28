@@ -27,19 +27,21 @@ class BusinessLogic {
             domainsChunk.push(reversedParsedDomain.splice(0, size));
         async.eachOfSeries(domainsChunk, async (domians, index) => {
             try {
-                let urls = await this.getUrlsFromGoogle({ domains: domians, prefix, postfix, statusPrefix, statusPostfix , counter: index ,size })
+                let urls = await this.getUrlsFromGoogle({ domains: domians, prefix, postfix, statusPrefix, statusPostfix, counter: index, size })
                 let allParsedUrls = await this.saveUrls(urls, tlds, consoleLog);
+                console.log(allParsedUrls.fileName)
                 result.push(allParsedUrls)
             } catch (error) {
                 console.log(error.message);
             }
-        },()=>{
+        }, () => {
             defer.resolve(allParsedUrls)
         })
 
         return defer.promise;
     }
     setPostfixPrefixDomain({ domains, prefix, postfix, statusPrefix, statusPostfix }) {
+
         let result = []
         if (statusPrefix == 5 && statusPostfix == 5) {
             domains.forEach(item => {
@@ -49,8 +51,8 @@ class BusinessLogic {
                     result.push(`${item}`)
                 if (`${item}${postfix}`.length > 3)
                     result.push(`${item}${postfix}`)
-
-                result.push(`${prefix}${item}${postfix}`)
+                if (`${prefix}${item}${postfix}`.length > 3)
+                    result.push(`${prefix}${item}${postfix}`)
 
             })
         }
@@ -102,12 +104,12 @@ class BusinessLogic {
 
         return uniqeDomain
     }
-    async getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix , counter, size}) {
+    async getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix, counter, size }) {
         let defer = q.defer()
         let googleUrls = []
         async.eachOfSeries(domains, async (domain, index) => {
             try {
-                console.log(`${index + (counter)*size}:${domain.toLowerCase()}`);
+                console.log(`${index + (counter) * size}:${domain.toLowerCase()}`);
                 const { error, result } = await GoogleWeb.run(domain);
                 if (error) {
                     console.log(error.message)
