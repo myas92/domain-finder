@@ -10,8 +10,8 @@ class GoogleWeb {
             let data = JSON.stringify({
                 "clientFilters": {},
                 "clientUserSpec": {
-                    "countryCode": "FR",
-                    "currencyCode": "EUR"
+                    "countryCode": "US",
+                    "currencyCode": "USD"
                 },
                 "debugType": "DEBUG_TYPE_NONE",
                 "query": word
