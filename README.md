@@ -5,8 +5,10 @@ If you spend more time for choosing the domain name, with this module you can qu
 
 ## First Example ##
 
+#### NOTE: domain name should be a word whitout numbers
+
 ```
-let domainFinder = require('domain-finder');
+const domainFinder = require('domain-finder');
 
 
 domainFinder({
@@ -15,7 +17,9 @@ domainFinder({
 })
 ```
 
-if domainNames be a one word, it generates possible words, and check domain for possible words based on `tlds`
+If `domainNames` be one word, it generates possible words, and check domain for possible words based on `tlds`
+
+Possible words for `apple`
 ```
 apple:  ["APPEL", "APPLE", "PEPLA", "LEAP", "PALE", "PALP", "PAPE", "PEAL", "PELA", "PLAP", "PLEA", "ALE",…]
 ```
@@ -27,7 +31,7 @@ APPLE:
 
 Available domains:
 ╔═══════════════╤═════════════════╤═════════════════╤═══════════════╤════════════════╤═════════════════╤═════════════════╗
-║ apple.com │ appledesai.com │ applehashem.com │ applesaid.net │ applemalik.net │ appleabbas.net │ appledesai.net ║
+║  apple.com    │ appledesai.com  │ applehashem.com │ applesaid.net │ applemalik.net │ appleabbas.net  │ appledesai.net  ║
 ╚═══════════════╧═════════════════╧═════════════════╧═══════════════╧════════════════╧═════════════════╧═════════════════╝
 Unavailable domains:
 ╔═══════════╤═══════════╗
@@ -41,11 +45,24 @@ Unavailable domains:
 if you want for check the domains of a series of specefic words, just try like this
 
 ```
+const domainFinder = require('domain-finder');
+
 domainFinder({
     domainNames:["hello","heloo"],
     tlds: ["com","net","org"]
 })
 
 ```
+## Third Example ##
+If you want to find domains for a word with lower than 4 length, you should set `prefix` or `postfix`
 
+```
+const domainFinder = require('domain-finder');
 
+domainFinder({
+    domainNames:["apple"],
+    tlds: ["com","net"],
+    prefix:"i",
+    postfix:"coin"
+})
+```

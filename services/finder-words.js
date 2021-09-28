@@ -1,5 +1,5 @@
-const QWeb = require('./services/q-web');
-const LexWeb = require('./services/lex-web');
+const QWeb = require('./q-web');
+const LexWeb = require('./lex-web');
 
 
 class FinderWords {
@@ -13,7 +13,6 @@ class FinderWords {
                 throw new Error("Access Error to the website", wordsList.error)
             }
         }
-        console.log("------Finish Process------");
         return wordsList?.result ? wordsList.result : [inputWord]
     }
 

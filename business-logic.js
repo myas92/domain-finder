@@ -1,7 +1,7 @@
 
 const async = require('async');
 const q = require('q');
-const FinderWords = require('./finder-words');
+const FinderWords = require('./services/finder-words');
 const GoogleWeb = require('./services/google.web');
 const { Table } = require('console-table-printer');
 const table = require('table').table;
@@ -10,7 +10,7 @@ class BusinessLogic {
     constructor() {
         this.finderWords = new FinderWords();
     }
-    async process({ domainNames, tlds }) {
+    async process({ domainNames, tlds, prefix, postfix }) {
         let domains;
         if (domainNames.length == 1)
             domains = await this.finderWords.find(domainNames[0])
@@ -18,24 +18,40 @@ class BusinessLogic {
             domains = domainNames
         }
 
-        let urls = await this.getUrls(domains)
-        let allParsedUrls =  this.saveUrls(urls, tlds)
+        let urls = await this.getUrls(domains, prefix, postfix)
+        let allParsedUrls = this.saveUrls(urls, tlds)
         return allParsedUrls
     }
 
-    async getUrls(domains) {
+    async getUrls(domains, prefix, postfix) {
         let defer = q.defer()
         let googleUrls = []
-        async.eachSeries(domains, async (domain) => {
+        async.eachOfSeries(domains, async (domain, index) => {
             try {
-                let { error, result } = await GoogleWeb.run();
-                if (error) {
-                    console.log(error.message)
+                if (domain.length > 3) {
+                    console.log(`${index+1}:${domain.toLowerCase()}`);
+                    let { error, result } = await GoogleWeb.run(domain);
+                    if (error) {
+                        console.log(error.message)
+                    }
+                    else if (result) {
+                        let obj = { domainName: domain, urls: result }
+                        googleUrls.push(obj)
+                    }
                 }
-                else if (result) {
-                    let obj = { domainName: domain, urls: result }
-                    googleUrls.push(obj)
+                else if (prefix || postfix) {
+                    domain = `${prefix}${domain}${postfix}`.toLowerCase()
+                    console.log(`${index+1}:${domain}`);
+                    let { error, result } = await GoogleWeb.run(domain);
+                    if (error) {
+                        console.log(error.message)
+                    }
+                    else if (result) {
+                        let obj = { domainName: domain, urls: result }
+                        googleUrls.push(obj)
+                    }
                 }
+
             } catch (error) {
                 console.log(error.message)
             }
@@ -55,10 +71,10 @@ class BusinessLogic {
             validInvalidUrls.push(processedUrls)
             //await this.saveUrlsToFile(processedUrls)
         }
-        return validInvalidUrls
+        return { validInvalidUrls, fileName }
     }
 
-    extractValidAndInvalidUrls(domainName, urls, tlds,fileName) {
+    extractValidAndInvalidUrls(domainName, urls, tlds, fileName) {
         let validResult = [];
         let invalidResult = [];
         const p = new Table();
@@ -114,15 +130,22 @@ class BusinessLogic {
                     dataInvalid.push(item)
                 })
             }
-            let outputValid = table([dataValid]);
-            let outputInvalid = table([dataInvalid]);
+            let outputValid;
+            let outputInvalid;
 
-            fs.appendFileSync(`${fileName}.txt`,`${domainName}:\r\n\n` )
-            fs.appendFileSync(`${fileName}.txt`,`Available domains:\r\n` )
-            fs.appendFileSync(`${fileName}.txt`,outputValid )
-            fs.appendFileSync(`${fileName}.txt`,`Unvailable domains:\r\n` )
-            fs.appendFileSync(`${fileName}.txt`,`${outputInvalid}` )
-            fs.appendFileSync(`${fileName}.txt`,`------------------------------------------------------------------------------------------------------\n` )
+            if (dataValid.length != 0)
+                outputValid = table([dataValid]);
+            if (dataInvalid.length != 0)
+                outputInvalid = table([dataInvalid]);
+
+            fs.appendFileSync(`${fileName}.txt`, `${domainName}:\r\n\n`)
+            fs.appendFileSync(`${fileName}.txt`, `Available domains:\r\n`)
+            if (dataValid.length != 0)
+                fs.appendFileSync(`${fileName}.txt`, outputValid)
+            fs.appendFileSync(`${fileName}.txt`, `Unvailable domains:\r\n`)
+            if (dataInvalid.length != 0)
+                fs.appendFileSync(`${fileName}.txt`, `${outputInvalid}`)
+            fs.appendFileSync(`${fileName}.txt`, `------------------------------------------------------------------------------------------------------\n`)
             // const CreateFiles = fs.createWriteStream('./file.txt', {
             //     flags: 'a' //flags: 'a' preserved old data
             // })
