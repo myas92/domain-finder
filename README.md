@@ -4,6 +4,7 @@
 
 If you spend more time for choosing the domain name, with this module you can quickly find a suitable name for own
 
+NOTE: If you are from Iran, Cuba, Sudan, Syria, or North Korea, Please use a VPN or Proxy
 ## First Example ##
 
 #### NOTE: domain name should be a word whitout numbers
