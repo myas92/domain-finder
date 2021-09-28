@@ -10,47 +10,94 @@ class BusinessLogic {
     constructor() {
         this.finderWords = new FinderWords();
     }
-    async process({ domainNames, tlds, prefix, postfix }) {
+    async process({ domainNames, tlds, consoleLog, prefix, postfix, statusPrefix, statusPostfix }) {
         let domains;
         if (domainNames.length == 1)
             domains = await this.finderWords.find(domainNames[0])
         else {
             domains = domainNames
         }
-
-        let urls = await this.getUrls(domains, prefix, postfix)
-        let allParsedUrls = this.saveUrls(urls, tlds)
+        let parsedDomain = this.setPostfixPrefixDomain({ domains, prefix, postfix, statusPrefix, statusPostfix })
+        let urls = await this.getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix })
+        let allParsedUrls = this.saveUrls(urls, tlds, consoleLog)
         return allParsedUrls
     }
+    setPostfixPrefixDomain({ domains, prefix, postfix, statusPrefix, statusPostfix }) {
+        let result = []
+        if (statusPrefix == 5 && statusPostfix == 5) {
+            domains.forEach(item => {
+                result.push(`${prefix}${item}`)
+                result.push(`${item}`)
+                result.push(`${item}${postfix}`)
+                result.push(`${prefix}${item}${postfix}`)
 
-    async getUrls(domains, prefix, postfix) {
+            })
+        }
+
+        if (prefix) {
+            if (statusPrefix == 0) {
+                domains.forEach(item => {
+                    result.push(`${item}`)
+                })
+            }
+
+            if (statusPrefix == 1) {
+                domains.forEach(item => {
+                    result.push(`${prefix}${item}`)
+                })
+            }
+
+            if (statusPrefix == 2) {
+                domains.forEach(item => {
+                    result.push(`${item}`)
+                    result.push(`${prefix}${item}`)
+                })
+            }
+        }
+        if (postfix) {
+            if (statusPostfix == 0) {
+                domains.forEach(item => {
+                    result.push(`${item}`)
+                })
+            }
+
+            if (statusPostfix == 1) {
+                domains.forEach(item => {
+                    result.push(`${item}${postfix}`)
+                })
+            }
+
+            if (statusPostfix == 2) {
+                domains.forEach(item => {
+                    result.push(`${item}`)
+                    result.push(`${item}${postfix}`)
+                })
+            }
+        }
+
+
+        let uniqeDomain = [...new Set(result)]
+        console.log(uniqeDomain);
+        console.log(result);
+    }
+    async getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix }) {
         let defer = q.defer()
         let googleUrls = []
         async.eachOfSeries(domains, async (domain, index) => {
             try {
-                if (domain.length > 3) {
-                    console.log(`${index+1}:${domain.toLowerCase()}`);
-                    let { error, result } = await GoogleWeb.run(domain);
-                    if (error) {
-                        console.log(error.message)
-                    }
-                    else if (result) {
-                        let obj = { domainName: domain, urls: result }
-                        googleUrls.push(obj)
-                    }
-                }
-                else if (prefix || postfix) {
+                if (domain.length < 4 && (prefix || postfix))
                     domain = `${prefix}${domain}${postfix}`.toLowerCase()
-                    console.log(`${index+1}:${domain}`);
-                    let { error, result } = await GoogleWeb.run(domain);
-                    if (error) {
-                        console.log(error.message)
-                    }
-                    else if (result) {
-                        let obj = { domainName: domain, urls: result }
-                        googleUrls.push(obj)
-                    }
+
+                console.log(`${index + 1}:${domain.toLowerCase()}`);
+                const { error, result } = await GoogleWeb.run(domain);
+                if (error) {
+                    console.log(error.message)
                 }
+                if (result) {
+                    let obj = { domainName: domain, urls: result }
+                    googleUrls.push(obj)
+                }
+
 
             } catch (error) {
                 console.log(error.message)
@@ -63,22 +110,27 @@ class BusinessLogic {
 
     }
 
-    async saveUrls(allUrls, tlds) {
+    async saveUrls(allUrls, tlds, consoleLog) {
         let fileName = +new Date()
         let validInvalidUrls = []
+
         for (let domians of allUrls) {
-            let processedUrls = this.extractValidAndInvalidUrls(domians.domainName, domians.urls, tlds, fileName)
-            validInvalidUrls.push(processedUrls)
-            //await this.saveUrlsToFile(processedUrls)
+            let { domainName, urls } = domians
+            let { validResult, invalidResult } = this.extractValidAndInvalidUrls({ urls, tlds })
+
+            if (consoleLog)
+                this.logUrlsInTerminal({ domainName, validResult, invalidResult })
+
+            await this.saveUrlsToFile({ validResult, invalidResult, fileName, domainName })
+            validInvalidUrls.push({ validResult, invalidResult })
         }
         return { validInvalidUrls, fileName }
     }
 
-    extractValidAndInvalidUrls(domainName, urls, tlds, fileName) {
+    extractValidAndInvalidUrls({ urls, tlds }) {
         let validResult = [];
         let invalidResult = [];
-        const p = new Table();
-        // let counter = 1;
+
         try {
             for (let i = 0; i < urls.length; i++) {
                 if (tlds.includes(urls[i].domainName.tld)) {
@@ -86,91 +138,79 @@ class BusinessLogic {
                         if (!invalidResult[urls[i].domainName.tld]) invalidResult[urls[i].domainName.tld] = []
                         let fullDomain = `${urls[i].domainName.sld}.${urls[i].domainName.tld}`
                         invalidResult[urls[i].domainName.tld].push(fullDomain);
-                        // p.addRow({ index: counter, domain: fullDomain }, { color: 'red' });
-                        // counter += 1
+
                     }
                     else {
                         if (!validResult[urls[i].domainName.tld]) validResult[urls[i].domainName.tld] = []
                         let fullDomain = `${urls[i].domainName.sld}.${urls[i].domainName.tld}`
-                        validResult[urls[i].domainName.tld].push(`${urls[i].domainName.sld}.${urls[i].domainName.tld}`);
-                        // p.addRow({ index: counter, domain: fullDomain }, { color: 'green' });
-                        // counter += 1
+                        validResult[urls[i].domainName.tld].push(fullDomain);
+
                     }
                 }
             }
-
-            // let count = 1;
-            // for (let key in validResult) {
-            //     validResult[key].forEach(item => {
-            //         p.addRow({ index: count, domain: item }, { color: 'green' });
-            //         count += 1
-            //     })
-            // }
-            // for (let key in invalidResult) {
-            //     invalidResult[key].forEach(item => {
-            //         p.addRow({ index: count, domain: item }, { color: 'red' });
-            //         count += 1
-            //     })
-            // }
-            // console.log('\x1b[36m%s\x1b[0m', domainName)
-            // p.printTable();
-
-
-
-            let dataValid = [];
-            let dataInvalid = [];
-            for (let key in validResult) {
-                validResult[key].forEach(item => {
-                    dataValid.push(item)
-
-                })
-            }
-            for (let key in invalidResult) {
-                invalidResult[key].forEach(item => {
-                    dataInvalid.push(item)
-                })
-            }
-            let outputValid;
-            let outputInvalid;
-
-            if (dataValid.length != 0)
-                outputValid = table([dataValid]);
-            if (dataInvalid.length != 0)
-                outputInvalid = table([dataInvalid]);
-
-            fs.appendFileSync(`${fileName}.txt`, `${domainName}:\r\n\n`)
-            fs.appendFileSync(`${fileName}.txt`, `Available domains:\r\n`)
-            if (dataValid.length != 0)
-                fs.appendFileSync(`${fileName}.txt`, outputValid)
-            fs.appendFileSync(`${fileName}.txt`, `Unvailable domains:\r\n`)
-            if (dataInvalid.length != 0)
-                fs.appendFileSync(`${fileName}.txt`, `${outputInvalid}`)
-            fs.appendFileSync(`${fileName}.txt`, `------------------------------------------------------------------------------------------------------\n`)
-            // const CreateFiles = fs.createWriteStream('./file.txt', {
-            //     flags: 'a' //flags: 'a' preserved old data
-            // })
-            //  CreateFiles.write(domainName + '\r\n')
-            //  CreateFiles.write(outputValid + '\r')
-            //  CreateFiles.write(outputInvalid + '\r')
-            // fs.writeFile("tabledata.txt", output, "utf8", function (err) {
-            //     if (err) {
-            //         return console.log(err);
-            //     }
-
-            //     console.log("The file was saved!");
-            // });
-            return { validResult, invalidResult }
+            return { validResult: validResult, invalidResult: invalidResult }
         } catch (error) {
             console.log(error)
         }
 
     }
 
-    async saveUrlsToFile(processedUrls) {
-
-        console.log(processedUrls);
+    logUrlsInTerminal({ domainName, validResult, invalidResult }) {
+        const p = new Table();
+        let count = 1;
+        for (let key in validResult) {
+            validResult[key].forEach(item => {
+                p.addRow({ index: count, domain: item }, { color: 'green' });
+                count += 1
+            })
+        }
+        for (let key in invalidResult) {
+            invalidResult[key].forEach(item => {
+                p.addRow({ index: count, domain: item }, { color: 'red' });
+                count += 1
+            })
+        }
+        console.log('\x1b[36m%s\x1b[0m', domainName)
+        p.printTable();
     }
 
+    async saveUrlsToFile({ validResult, invalidResult, fileName, domainName }) {
+        try {
+            let dataValid;
+            let dataInvalid;
+            let outputValid;
+            let outputInvalid;
+            dataValid = this.processValidInvalidUrls(validResult);
+            dataInvalid = this.processValidInvalidUrls(invalidResult);
+
+            fs.appendFileSync(`${fileName}.txt`, `${domainName}:\r\n\n`);
+            fs.appendFileSync(`${fileName}.txt`, `Available domains:\r\n`);
+
+            if (dataValid.length != 0) {
+                outputValid = table([dataValid]);
+                fs.appendFileSync(`${fileName}.txt`, outputValid)
+            }
+
+            fs.appendFileSync(`${fileName}.txt`, `Unvailable domains:\r\n`)
+
+            if (dataInvalid.length != 0) {
+                outputInvalid = table([dataInvalid]);
+                fs.appendFileSync(`${fileName}.txt`, `${outputInvalid}`)
+            }
+            fs.appendFileSync(`${fileName}.txt`, `--------------------------------------------------------------------------------------------\n`)
+        } catch (error) {
+            console.log("saveUrlsToFile:", error.message);
+        }
+    }
+    processValidInvalidUrls(urls) {
+        let result = []
+        for (let key in urls) {
+            urls[key].forEach(item => {
+                result.push(item)
+            })
+        }
+        return result
+    }
 
 }
 

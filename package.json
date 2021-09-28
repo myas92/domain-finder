@@ -1,7 +1,7 @@
 {
   "name": "domain-finder",
-  "version": "0.0.4",
-  "description": "find list of valid domains",
+  "version": "0.0.5",
+  "description": "Find list of valid domains based in a key word",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,12 @@
     "url": "git+https://github.com/mohammadyaser/domian-finder.git"
   },
   "keywords": [
-    "domain"
+    "domain",
+    "find domain",
+    "check domain",
+    "domian finder",
+    "domain-finder",
+    "host"
   ],
   "author": "Yaser",
   "license": "ISC",
@@ -27,5 +32,8 @@
     "q": "^1.5.1",
     "qs": "^6.10.1",
     "table": "^6.7.1"
+  },
+  "devDependencies": {
+    "jest": "^27.2.2"
   }
 }
