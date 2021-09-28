@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mohammadyaser/domian-finder.git"
+    "url": "git+https://github.com/mohammadyaser/domain-finder.git"
   },
   "keywords": [
     "domain",
     "finddomain",
     "checkdomain",
-    "domianfinder",
+    "domaininder",
     "domain-finder",
     "host",
     "domain-scrapper"
@@ -22,9 +22,9 @@
   "author": "Yaser",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mohammadyaser/domian-finder/issues"
+    "url": "https://github.com/mohammadyaser/domain-finder/issues"
   },
-  "homepage": "https://github.com/mohammadyaser/domian-finder#readme",
+  "homepage": "https://github.com/mohammadyaser/domain-finder#readme",
   "dependencies": {
     "async": "^3.2.1",
     "axios": "^0.21.4",
