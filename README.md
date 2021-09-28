@@ -133,7 +133,7 @@ domainFinder({
 
 result: 
 
-![alt text](https://github.com/mohammadyaser/domain-finder/blob/master/result.png?raw=true)
+![alt text](https://github.com/mohammadyaser/domian-finder/blob/master/assets/result.png)
 
 
 
