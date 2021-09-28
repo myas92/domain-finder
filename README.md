@@ -134,7 +134,7 @@ domainFinder({
 
 #### result: ####
 
-![alt text](https://github.com/mohammadyaser/domian-finder/blob/master/assets/result.png)
+![alt text](https://github.com/mohammadyaser/domain-finder/blob/master/assets/result.png)
 
 
 

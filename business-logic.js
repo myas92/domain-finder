@@ -25,9 +25,9 @@ class BusinessLogic {
         let result = []
         while (reversedParsedDomain.length > 0)
             domainsChunk.push(reversedParsedDomain.splice(0, size));
-        async.eachOfSeries(domainsChunk, async (domians, index) => {
+        async.eachOfSeries(domainsChunk, async (domains, index) => {
             try {
-                let urls = await this.getUrlsFromGoogle({ domains: domians, prefix, postfix, statusPrefix, statusPostfix, counter: index, size })
+                let urls = await this.getUrlsFromGoogle({ domains: domains, prefix, postfix, statusPrefix, statusPostfix, counter: index, size })
                 let allParsedUrls = await this.saveUrls(urls, tlds, consoleLog);
                 console.log(`Please check ${allParsedUrls.fileName}.txt`);
                 result.push(allParsedUrls)
@@ -133,8 +133,8 @@ class BusinessLogic {
         let fileName = +new Date()
         let validInvalidUrls = []
 
-        for (let domians of allUrls) {
-            let { domainName, urls } = domians
+        for (let domains of allUrls) {
+            let { domainName, urls } = domains
             let { validResult, invalidResult } = this.extractValidAndInvalidUrls({ urls, tlds })
 
             if (consoleLog)

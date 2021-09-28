@@ -1,6 +1,6 @@
 {
   "name": "domain-finder",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "description": "Find list of valid domains based on a key word",
   "main": "index.js",
   "scripts": {
@@ -14,8 +14,11 @@
     "domain",
     "finddomain",
     "checkdomain",
-    "domaininder",
+    "domainfinder",
     "domain-finder",
+    "subdomain",
+    "search-domain",
+    "find-domain",
     "host",
     "domain-scrapper"
   ],
