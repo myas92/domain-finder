@@ -1,6 +1,6 @@
 {
   "name": "domain-finder",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Find list of valid domains based on a key word",
   "main": "index.js",
   "scripts": {
@@ -12,11 +12,12 @@
   },
   "keywords": [
     "domain",
-    "find domain",
-    "check domain",
-    "domian finder",
+    "finddomain",
+    "checkdomain",
+    "domianfinder",
     "domain-finder",
-    "host"
+    "host",
+    "domain-scrapper"
   ],
   "author": "Yaser",
   "license": "ISC",

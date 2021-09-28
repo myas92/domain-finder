@@ -11,6 +11,7 @@ class BusinessLogic {
         this.finderWords = new FinderWords();
     }
     async process({ domainNames, tlds, consoleLog, prefix, postfix, statusPrefix, statusPostfix }) {
+        let defer = q.defer()
         let initDomains;
         if (domainNames.length == 1)
             initDomains = await this.finderWords.find(domainNames[0])
@@ -18,17 +19,37 @@ class BusinessLogic {
             initDomains = domainNames
         }
         let parsedDomain = this.setPostfixPrefixDomain({ domains: initDomains, prefix, postfix, statusPrefix, statusPostfix })
-        let urls = await this.getUrlsFromGoogle({ domains: parsedDomain, prefix, postfix, statusPrefix, statusPostfix })
-        let allParsedUrls = this.saveUrls(urls, tlds, consoleLog)
-        return allParsedUrls
+        const reversedParsedDomain = parsedDomain.reverse()
+        let domainsChunk = [];
+        const size = 20;
+        let result = []
+        while (reversedParsedDomain.length > 0)
+            domainsChunk.push(reversedParsedDomain.splice(0, size));
+        async.eachOfSeries(domainsChunk, async (domians, index) => {
+            try {
+                let urls = await this.getUrlsFromGoogle({ domains: domians, prefix, postfix, statusPrefix, statusPostfix , counter: index ,size })
+                let allParsedUrls = await this.saveUrls(urls, tlds, consoleLog);
+                result.push(allParsedUrls)
+            } catch (error) {
+                console.log(error.message);
+            }
+        },()=>{
+            defer.resolve(allParsedUrls)
+        })
+
+        return defer.promise;
     }
     setPostfixPrefixDomain({ domains, prefix, postfix, statusPrefix, statusPostfix }) {
         let result = []
         if (statusPrefix == 5 && statusPostfix == 5) {
             domains.forEach(item => {
-                result.push(`${prefix}${item}`)
-                result.push(`${item}`)
-                result.push(`${item}${postfix}`)
+                if (`${prefix}${item}`.length > 3)
+                    result.push(`${prefix}${item}`)
+                if (item.length > 3)
+                    result.push(`${item}`)
+                if (`${item}${postfix}`.length > 3)
+                    result.push(`${item}${postfix}`)
+
                 result.push(`${prefix}${item}${postfix}`)
 
             })
@@ -36,7 +57,8 @@ class BusinessLogic {
         if (prefix) {
             if (statusPrefix == 0) {
                 domains.forEach(item => {
-                    result.push(`${item}`)
+                    if (item.length > 3)
+                        result.push(`${item}`)
                 })
             }
 
@@ -48,7 +70,8 @@ class BusinessLogic {
 
             if (statusPrefix == 2) {
                 domains.forEach(item => {
-                    result.push(`${item}`)
+                    if (item.length > 3)
+                        result.push(`${item}`)
                     result.push(`${prefix}${item}`)
                 })
             }
@@ -56,7 +79,8 @@ class BusinessLogic {
         if (postfix) {
             if (statusPostfix == 0) {
                 domains.forEach(item => {
-                    result.push(`${item}`)
+                    if (item.length > 3)
+                        result.push(`${item}`)
                 })
             }
 
@@ -68,7 +92,8 @@ class BusinessLogic {
 
             if (statusPostfix == 2) {
                 domains.forEach(item => {
-                    result.push(`${item}`)
+                    if (item.length > 3)
+                        result.push(`${item}`)
                     result.push(`${item}${postfix}`)
                 })
             }
@@ -77,12 +102,12 @@ class BusinessLogic {
 
         return uniqeDomain
     }
-    async getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix }) {
+    async getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix , counter, size}) {
         let defer = q.defer()
         let googleUrls = []
         async.eachOfSeries(domains, async (domain, index) => {
             try {
-                console.log(`${index + 1}:${domain.toLowerCase()}`);
+                console.log(`${index + (counter)*size}:${domain.toLowerCase()}`);
                 const { error, result } = await GoogleWeb.run(domain);
                 if (error) {
                     console.log(error.message)
