@@ -1,4 +1,4 @@
-# domian-finder
+# domain-finder
 
 [domain-finder](https://github.com/mohammadyaser/domian-finder) is used to find, scan and collect available and unavailable domains;
 
@@ -31,9 +31,9 @@ create a .txt file based on time, that all available and unavailable domains are
 APPLE:
 
 Available domains:
-╔═══════════════╤═════════════════╤═════════════════╤═══════════════╤════════════════╤═════════════════╤═════════════════╗
-║  apple.com    │ appledesai.com  │ applehashem.com │ applesaid.net │ applemalik.net │ appleabbas.net  │ appledesai.net  ║
-╚═══════════════╧═════════════════╧═════════════════╧═══════════════╧════════════════╧═════════════════╧═════════════════╝
+╔═════════════════╤═════════════════╤═══════════════╤════════════════╤═════════════════╤═════════════════╗
+║ appledesai.com  │ applehashem.com │ applesaid.net │ applemalik.net │ appleabbas.net  │ appledesai.net  ║
+╚═════════════════╧═════════════════╧═══════════════╧════════════════╧═════════════════╧═════════════════╝
 Unavailable domains:
 ╔═══════════╤═══════════╗
 ║ apple.com │ apple.net ║
