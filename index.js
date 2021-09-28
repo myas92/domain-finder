@@ -28,8 +28,7 @@ async function run({ domainNames, tlds, prefix = "", postfix = "", consoleLog = 
         console.log(validationMessages);
         return []
     }
-    let { validInvalidUrls, fileName } = await BL.process({ domainNames, tlds, prefix, postfix, consoleLog, statusPrefix, statusPostfix })
-    console.log(`Please check ${fileName}.txt`);
+    let { validInvalidUrls } = await BL.process({ domainNames, tlds, prefix, postfix, consoleLog, statusPrefix, statusPostfix })
     return validInvalidUrls
 }
 function validateInputs({ domainNames, tlds, prefix, postfix, consoleLog, statusPrefix, statusPostfix }) {

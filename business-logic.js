@@ -29,7 +29,7 @@ class BusinessLogic {
             try {
                 let urls = await this.getUrlsFromGoogle({ domains: domians, prefix, postfix, statusPrefix, statusPostfix, counter: index, size })
                 let allParsedUrls = await this.saveUrls(urls, tlds, consoleLog);
-                console.log(allParsedUrls.fileName)
+                console.log(`Please check ${allParsedUrls.fileName}.txt`);
                 result.push(allParsedUrls)
             } catch (error) {
                 console.log(error.message);
