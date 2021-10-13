@@ -1,8 +1,8 @@
 # domain-finder
 
-[domain-finder](https://github.com/mohammadyaser/domain-finder) is used to find, scan and collect available and unavailable domains;
+[domain-finder](https://github.com/myas92/domain-finder) is used to find, scan and collect available and unavailable domains;
 
-If you spend more time for choosing the domain name, with this module you can quickly find a suitable name for own
+If you spend more time for choosing the domain name, with this module you can quickly find a suitable name
 
 NOTE: If you are from Iran, Cuba, Sudan, Syria, or North Korea, Please use a VPN or Proxy
 ## First Example ##
