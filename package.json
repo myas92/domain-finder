@@ -1,6 +1,6 @@
 {
   "name": "domain-finder",
-  "version": "0.0.10",
+  "version": "1.0.0",
   "description": "Find list of valid domains based on a key word",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mohammadyaser/domian-finder.git"
+    "url": "git+https://github.com/myas92/domian-finder.git"
   },
   "keywords": [
     "domain",
@@ -22,7 +22,7 @@
   "author": "Yaser",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mohammadyaser/domian-finder/issues"
+    "url": "https://github.com/myas92/domian-finder/issues"
   },
   "homepage": "https://github.com/mohammadyaser/domian-finder#readme",
   "dependencies": {
