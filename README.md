@@ -1,6 +1,6 @@
-# domian-finder
+# domain-finder
 
-[domain-finder](https://github.com/mohammadyaser/domian-finder) is used to find, scan and collect available and unavailable domains;
+[domain-finder](https://github.com/mohammadyaser/domain-finder) is used to find, scan and collect available and unavailable domains;
 
 If you spend more time for choosing the domain name, with this module you can quickly find a suitable name for own
 
@@ -31,9 +31,9 @@ create a .txt file based on time, that all available and unavailable domains are
 APPLE:
 
 Available domains:
-╔═══════════════╤═════════════════╤═════════════════╤═══════════════╤════════════════╤═════════════════╤═════════════════╗
-║  apple.com    │ appledesai.com  │ applehashem.com │ applesaid.net │ applemalik.net │ appleabbas.net  │ appledesai.net  ║
-╚═══════════════╧═════════════════╧═════════════════╧═══════════════╧════════════════╧═════════════════╧═════════════════╝
+╔═════════════════╤═════════════════╤═══════════════╤════════════════╤═════════════════╤═════════════════╗
+║ appledesai.com  │ applehashem.com │ applesaid.net │ applemalik.net │ appleabbas.net  │ appledesai.net  ║
+╚═════════════════╧═════════════════╧═══════════════╧════════════════╧═════════════════╧═════════════════╝
 Unavailable domains:
 ╔═══════════╤═══════════╗
 ║ apple.com │ apple.net ║
@@ -43,7 +43,7 @@ Unavailable domains:
 
 ## Second Example ##
 
-if you want for check the domains of a series of specefic words, just try like this
+If you want to check the domains of a series of specefic words, just try like this
 
 ```javascript
 const domainFinder = require('domain-finder');
@@ -134,7 +134,7 @@ domainFinder({
 
 #### result: ####
 
-![alt text](https://github.com/mohammadyaser/domian-finder/blob/master/assets/result.png)
+![alt text](https://github.com/mohammadyaser/domain-finder/blob/master/assets/result.png)
 
 
 

@@ -8,23 +8,28 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/myas92/domian-finder.git"
+    "url": "git+https://github.com/myas92/domain-finder.git"
+
   },
   "keywords": [
     "domain",
     "finddomain",
     "checkdomain",
-    "domianfinder",
+    "domainfinder",
     "domain-finder",
+    "subdomain",
+    "search-domain",
+    "find-domain",
     "host",
     "domain-scrapper"
   ],
   "author": "Yaser",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/myas92/domian-finder/issues"
+
+    "url": "https://github.com/myas92/domain-finder/issues"
   },
-  "homepage": "https://github.com/mohammadyaser/domian-finder#readme",
+  "homepage": "https://github.com/myas92/domain-finder#readme",
   "dependencies": {
     "async": "^3.2.1",
     "axios": "^0.21.4",
