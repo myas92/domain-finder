@@ -22,13 +22,14 @@ class BusinessLogic {
         const reversedParsedDomain = parsedDomain.reverse()
         let domainsChunk = [];
         const size = 20;
-        let result = []
+        let result = [];
+        let allParsedUrls;
         while (reversedParsedDomain.length > 0)
             domainsChunk.push(reversedParsedDomain.splice(0, size));
         async.eachOfSeries(domainsChunk, async (domains, index) => {
             try {
                 let urls = await this.getUrlsFromGoogle({ domains: domains, prefix, postfix, statusPrefix, statusPostfix, counter: index, size })
-                let allParsedUrls = await this.saveUrls(urls, tlds, consoleLog);
+                allParsedUrls = await this.saveUrls(urls, tlds, consoleLog);
                 console.log(`Please check ${allParsedUrls.fileName}.txt`);
                 result.push(allParsedUrls)
             } catch (error) {
