@@ -13,8 +13,12 @@ class BusinessLogic {
     async process({ domainNames, tlds, consoleLog, prefix, postfix, statusPrefix, statusPostfix }) {
         let defer = q.defer()
         let initDomains;
-        if (domainNames.length == 1)
+        if (domainNames.length == 1){
             initDomains = await this.finderWords.find(domainNames[0])
+            if(!initDomains.includes(domainNames[0].toUpperCase())){
+                initDomains.push(domainNames[0].toUpperCase())
+            }
+        }
         else {
             initDomains = domainNames
         }
@@ -22,7 +26,7 @@ class BusinessLogic {
         const reversedParsedDomain = parsedDomain.reverse()
         let domainsChunk = [];
         const size = 20;
-        let result = [];
+        let result = []
         let allParsedUrls;
         while (reversedParsedDomain.length > 0)
             domainsChunk.push(reversedParsedDomain.splice(0, size));
@@ -30,7 +34,7 @@ class BusinessLogic {
             try {
                 let urls = await this.getUrlsFromGoogle({ domains: domains, prefix, postfix, statusPrefix, statusPostfix, counter: index, size })
                 allParsedUrls = await this.saveUrls(urls, tlds, consoleLog);
-                console.log(`Please check ${allParsedUrls.fileName}.txt`);
+                if (allParsedUrls.length > 0) console.log(`Please check ${allParsedUrls.fileName}.txt`);
                 result.push(allParsedUrls)
             } catch (error) {
                 console.log(error.message);
@@ -108,9 +112,10 @@ class BusinessLogic {
     async getUrlsFromGoogle({ domains, prefix, postfix, statusPrefix, statusPostfix, counter, size }) {
         let defer = q.defer()
         let googleUrls = []
+        console.log('Domain names list:', domains)
         async.eachOfSeries(domains, async (domain, index) => {
             try {
-                console.log(`${index + (counter) * size}:${domain.toLowerCase()}`);
+                // console.log(`${index + (counter) * size}:${domain.toLowerCase()}`);
                 const { error, result } = await GoogleWeb.run(domain);
                 if (error) {
                     console.log(error.message)
@@ -128,7 +133,7 @@ class BusinessLogic {
 
         return defer.promise;
 
-    }
+    }f
 
     async saveUrls(allUrls, tlds, consoleLog) {
         let fileName = +new Date()
@@ -204,14 +209,14 @@ class BusinessLogic {
             dataInvalid = this.processValidInvalidUrls(invalidResult);
 
             fs.appendFileSync(`${fileName}.txt`, `${domainName}:\r\n\n`);
-            fs.appendFileSync(`${fileName}.txt`, `Available domains:\r\n`);
+            fs.appendFileSync(`${fileName}.txt`, `Available\r\n`);
 
             if (dataValid.length != 0) {
                 outputValid = table([dataValid]);
                 fs.appendFileSync(`${fileName}.txt`, outputValid)
             }
 
-            fs.appendFileSync(`${fileName}.txt`, `Unvailable domains:\r\n`)
+            fs.appendFileSync(`${fileName}.txt`, `Unvailable\r\n`)
 
             if (dataInvalid.length != 0) {
                 outputInvalid = table([dataInvalid]);

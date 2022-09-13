@@ -43,7 +43,7 @@ Unavailable domains:
 
 ## Second Example ##
 
-If you want to check the domains of a series of specefic words, just try like this
+If you want to check the domains of a series of specific words, just try like this
 
 ```javascript
 const domainFinder = require('domain-finder');
@@ -55,7 +55,7 @@ domainFinder({
 
 ```
 ## Third Example ##
-If you want to find domains for a word with lower than 4 length, you should set `prefix` or `postfix`
+If you want to find domains for a word with lower than 4 lengths, you should set `prefix` or `postfix`
 
 ```javascript
 const domainFinder = require('domain-finder');
@@ -68,7 +68,7 @@ domainFinder({
 })
 ```
 ## Fourth Example ##
-If you want to find domains for a word with lower than 4 length, you should set `prefix` or `postfix`,
+If you want to find domains for a word with lower than 4 lengths, you should set `prefix` or `postfix`,
 There are diffrenete status for prefix and post fix
 
 `statusPrefix=0` that means if you set the `prefix` is ignored.
